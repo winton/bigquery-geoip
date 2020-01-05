@@ -55,6 +55,5 @@ select city.*, ips.*
 from ips
 left join geoip.city
   on CAST(NET.IPV4_TO_INT64(NET.IP_FROM_STRING(ips.ip))/(256*256*256) as INT64) = class_a
-    and NET.IPV4_TO_INT64(NET.IP_FROM_STRING(ips.ip))
-  between start_num and end_num
+    and NET.IPV4_TO_INT64(NET.IP_FROM_STRING(ips.ip)) between start_num and end_num
 ```
