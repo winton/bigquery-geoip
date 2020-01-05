@@ -1,0 +1,34 @@
+{
+  "name": "@winton/bigquery-geoip",
+  "version": "0.0.1",
+  "description": "Bigquery maxmind geoip loader",
+  "scripts": {
+    "load": "./bin/load",
+    "release": "./bin/release",
+    "update": "ncu -u"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/winton/bigquery-geoip.git"
+  },
+  "author": "Winton Welsh <mail@wintoni.us>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/winton/bigquery-geoip/issues"
+  },
+  "homepage": "https://github.com/winton/bigquery-geoip#readme",
+  "devDependencies": {
+    "lint-staged": "9.5.0",
+    "npm-check-updates": "4.0.1",
+    "prettier": "1.19.1",
+    "release-it": "12.4.3",
+    "semver": "7.1.1"
+  },
+  "dependencies": {},
+  "lint-staged": {
+    "*.{css,json,md}": [
+      "prettier --write",
+      "git add"
+    ]
+  }
+}

@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+DATASET=${1:-geoip}
+
+ASN_BLOCKS_CSV=$(ls GeoLite2-ASN-CSV*/GeoLite2-ASN-Blocks-IPv4.csv)
+CITY_BLOCKS_CSV=$(ls GeoLite2-City-CSV*/GeoLite2-City-Blocks-IPv4.csv)
+CITY_LOCATIONS_CSV=$(ls GeoLite2-City-CSV*/GeoLite2-City-Locations-en.csv)
+
+if [ ! -f $ASN_BLOCKS_CSV ]; then
+    echo "Not found: $ASN_BLOCKS_CSV"
+fi
+
+if [ ! -f $CITY_BLOCKS_CSV ]; then
+    echo "Not found: $CITY_BLOCKS_CSV"
+fi
+
+if [ ! -f $CITY_LOCATIONS_CSV ]; then
+    echo "Not found: $CITY_LOCATIONS_CSV"
+fi
+
+bq rm -t $DATASET.tmp_asn
+bq rm -t $DATASET.tmp_city_ip
+bq rm -t $DATASET.tmp_city_labels
+
+bq load --skip_leading_rows=1 $DATASET.tmp_asn $ASN_BLOCKS_CSV "network:string,autonomous_system_number:integer,autonomous_system_organization:string"
+
+bq load --skip_leading_rows=1 $DATASET.tmp_city_ip $CITY_BLOCKS_CSV "network:string,geoname_id:integer,registered_country_geoname_id:integer,represented_country_geoname_id:integer,is_anonymous_proxy:integer,is_satellite_provider:integer,postal_code:string,latitude:float,longitude:float,accuracy_radius:integer"
+
+bq load --skip_leading_rows=1 $DATASET.tmp_city_labels $CITY_LOCATIONS_CSV "geoname_id:integer,locale_code:string,continent_code:string,continent_name:string,country_iso_code:string,country_name:string,subdivision_1_iso_code:string,subdivision_1_name:string,subdivision_2_iso_code:string,subdivision_2_name:string,city_name:string,metro_code:integer,time_zone:string,is_in_european_union:integer"
+
+bq rm -t $DATASET.city
+
+if [ ! -f maxmind.sql ]; then
+  SQL=$(cat maxmind.sql)
+else
+  cd "$(dirname "$0")/../"
+  SQL=$(cat src/maxmind.sql)
+fi
+
+bq query --use_legacy_sql=false --allow_large_results --destination_table=$DATASET.city "$SQL"
