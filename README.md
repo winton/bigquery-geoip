@@ -4,7 +4,7 @@ Bigquery maxmind geoip loader
 
 ## Download GeoLite2
 
-Sign up for an account at <maxmind.com>.
+Sign up for an account at <https://maxmind.com>.
 
 Download and extract the following databases:
 
