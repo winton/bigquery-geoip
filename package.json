@@ -2,6 +2,9 @@
   "name": "@winton/bigquery-geoip",
   "version": "0.0.1",
   "description": "Bigquery maxmind geoip loader",
+  "bin": {
+    "bigquery-geoip": "./bin/load"
+  },
   "scripts": {
     "load": "./bin/load",
     "release": "./bin/release",

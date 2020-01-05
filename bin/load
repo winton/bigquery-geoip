@@ -8,14 +8,17 @@ CITY_LOCATIONS_CSV=$(ls GeoLite2-City-CSV*/GeoLite2-City-Locations-en.csv)
 
 if [ ! -f $ASN_BLOCKS_CSV ]; then
     echo "Not found: $ASN_BLOCKS_CSV"
+    exit 1
 fi
 
 if [ ! -f $CITY_BLOCKS_CSV ]; then
     echo "Not found: $CITY_BLOCKS_CSV"
+    exit 1
 fi
 
 if [ ! -f $CITY_LOCATIONS_CSV ]; then
     echo "Not found: $CITY_LOCATIONS_CSV"
+    exit 1
 fi
 
 bq rm -t $DATASET.tmp_asn
@@ -31,10 +34,11 @@ bq load --skip_leading_rows=1 $DATASET.tmp_city_labels $CITY_LOCATIONS_CSV "geon
 bq rm -t $DATASET.city
 
 if [ ! -f maxmind.sql ]; then
-  SQL=$(cat maxmind.sql)
-else
-  cd "$(dirname "$0")/../"
+  cd "$(dirname "$0")"
+  cd "$(dirname "$(readlink "$0")")/../"
   SQL=$(cat src/maxmind.sql)
+else
+  SQL=$(cat maxmind.sql)
 fi
 
-bq query --use_legacy_sql=false --allow_large_results --destination_table=$DATASET.city "$SQL"
+bq query --use_legacy_sql=false --allow_large_results --destination_table=$DATASET.city "${SQL//geoip\./$DATASET.}"
