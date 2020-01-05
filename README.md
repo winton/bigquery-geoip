@@ -17,7 +17,7 @@ Download and extract the following databases:
 bq mk geoip
 ```
 
-## Load bigquery tables
+## Load tables
 
 First, `cd` to the parent directory of the extracted database directories:
 
