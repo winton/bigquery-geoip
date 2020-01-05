@@ -17,14 +17,17 @@ Download and extract the following databases:
 bq mk geoip
 ```
 
-## Load into bigquery
+## Load bigquery tables
 
 First, `cd` to the parent directory of the extracted database directories:
 
 ```bash
 cd ~/Downloads
-ls GeoLite2-ASN-CSV* # should exist
-ls GeoLite2-City-CSV* # should exist
+
+# These paths should exist:
+ls GeoLite2-ASN-CSV*/GeoLite2-ASN-Blocks-IPv4.csv
+ls GeoLite2-City-CSV*/GeoLite2-City-Blocks-IPv4.csv
+ls GeoLite2-City-CSV*/GeoLite2-City-Locations-en.csv
 ```
 
 Then run the [load script](bin/load):
@@ -50,8 +53,8 @@ with ips as (
 )
 select city.*, ips.*
 from ips
-left join geoip.city as city
+left join geoip.city
   on CAST(NET.IPV4_TO_INT64(NET.IP_FROM_STRING(ips.ip))/(256*256*256) as INT64) = class_a
-  and NET.IPV4_TO_INT64(NET.IP_FROM_STRING(ips.ip))
+    and NET.IPV4_TO_INT64(NET.IP_FROM_STRING(ips.ip))
   between start_num and end_num
 ```
