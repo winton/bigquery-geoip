@@ -37,14 +37,6 @@ npm install -g bigquery-geoip
 bigquery-geoip
 ```
 
-## Customize dataset name
-
-The default dataset name is `geoip`. Customize it by adding an argument:
-
-```bash
-bigquery-geoip ipToCity
-```
-
 ## Try it out
 
 ```sql
@@ -56,4 +48,12 @@ from ips
 left join geoip.city
   on CAST(NET.IPV4_TO_INT64(NET.IP_FROM_STRING(ips.ip))/(256*256*256) as INT64) = class_a
     and NET.IPV4_TO_INT64(NET.IP_FROM_STRING(ips.ip)) between start_num and end_num
+```
+
+## Customize dataset name
+
+The default dataset name is `geoip`. Customize it by adding an argument:
+
+```bash
+bigquery-geoip ipToCity
 ```
