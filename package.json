@@ -1,5 +1,5 @@
 {
-  "name": "@winton/bigquery-geoip",
+  "name": "bigquery-geoip",
   "version": "0.1.0",
   "description": "Bigquery maxmind geoip loader",
   "bin": {
