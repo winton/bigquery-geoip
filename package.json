@@ -1,6 +1,6 @@
 {
   "name": "bigquery-geoip",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Bigquery maxmind geoip loader",
   "bin": {
     "bigquery-geoip": "./bin/load"
